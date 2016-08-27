@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WA Map</string>
+    <string name="map_of_wa_campus">Map of WA campus</string>
+    <string name="select_start_loc">Where are you now?</string>
+    <string name="select_end_loc">Where do you want to go?</string>
+    <string-array name="locations">
+        <item>Select a location...</item>
+        <item>Circle</item>
+        <item>Bullring</item>
+        <item>Library</item>
+        <item>Richardson</item>
+        <item>Front of Woodruff</item>
+        <item>Back of Woodruff</item>
+        <item>Carlos Science</item>
+        <item>Moss Math/Science</item>
+        <item>Campus Store</item>
+        <item>Brand Hall</item>
+    </string-array>
+
+
+</resources>
