@@ -4,8 +4,11 @@
     <string name="select_start_loc">Where are you now?</string>
     <string name="select_end_loc">Where do you want to go?</string>
     <string name="submit_locs">(Pokemon) Go</string>
+    <string name="choose_loc_from">Choose a location</string>
+    <string name="submit_locs_btn">(Pokemon) Go</string>
+    <string name="map_of_wa">Map of WA</string>
     <string-array name="locations">
-        <item>Select a location...</item>
+
         <item>Circle</item>
         <item>Bullring</item>
         <item>Library</item>
