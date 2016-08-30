@@ -6,12 +6,11 @@
     tools:context=".drawMap">
 
 
-    <View class="com.strat.wamap.drawMap$MyCustomView"
-        android:layout_width="500dp"
-        android:layout_height="200dp"
-        android:text="New Text"
-        android:id="@+id/textView"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
+        android:layout_alignParentStart="true"
+        android:background="@drawable/map_sm" />
 </RelativeLayout>
