@@ -2,13 +2,18 @@ package com.strat.wamap;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -62,21 +67,17 @@ public class drawMap extends AppCompatActivity {
 
     }
 
-    public static class MyCustomView extends View {
-        public MyCustomView (Context context) {
-            super(context);
-        }
+    private void crearPunto(float x, float y, float xend, float yend, int color) {
+        ImageView map = (ImageView) findViewById(R.id.imageView);
+        Log.i("info", "image width: " + map.getWidth());
+        Bitmap bmp = Bitmap.createBitmap(map.getWidth(), map.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmp);
+        map.draw(c);
 
-        @Override
-        protected void onDraw(Canvas canvas) {
-            Paint myPaint = new Paint();
-            myPaint.setStrokeWidth(5);
-            myPaint.setColor(Color.BLUE);
-            myPaint.setStyle(Paint.Style.FILL);
-            canvas.drawRoundRect(40,50,80,100,2,2,myPaint);
-            Log.i("info","onDraw called");
-            invalidate();
-        }
+        Paint p = new Paint();
+        p.setColor(color);
+        c.drawLine(x, y, xend, yend, p);
+        map.setImageBitmap(bmp);
     }
 
     @Override
@@ -85,12 +86,43 @@ public class drawMap extends AppCompatActivity {
         setContentView(R.layout.activity_draw_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         getSupportActionBar().hide();
+        ImageView map = (ImageView) findViewById(R.id.imageView);
+        /*map.post(new Runnable() {
+            @Override
+            public void run() {
+                ImageView map = (ImageView) findViewById(R.id.imageView);
+                int height = map.getHeight();
+                int width = map.getWidth();
+                crearPunto(30, 40, 100,150, Color.WHITE);
+            }
+        });*/
         //Intent intent = getIntent();
         //int startLoc = intent.getIntExtra("com.strat.wamap.start",-1);
         //int endLoc = intent.getIntExtra("com.strat.wamap.end",-1);
-        TextView text = (TextView) findViewById(R.id.textView);
-        Log.i("info","invalidate theoretically called");
-            text.invalidate();
-        text.postInvalidate();
+        // text = (TextView) findViewById(R.id.textView);
+        //MapDrawing mapTest = (MapDrawing) findViewById(R.id.test);
+        //Log.i("info","invalidate theoretically called");
+        //   mapTest.invalidate();
+        //mapTest.postInvalidate();
+
+        ViewTreeObserver vto = map.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ImageView map = (ImageView) findViewById(R.id.imageView);
+                Log.i("info","on global layout map.height() = " + map.getHeight());
+                Log.i("info","on global layout map.width() = " + map.getWidth());
+                crearPunto(30, 40, 1000,150, Color.WHITE);
+
+                ViewTreeObserver vto = map.getViewTreeObserver();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    vto.removeOnGlobalLayoutListener(this);
+                } else {
+                    vto.removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+
+
     }
 }
