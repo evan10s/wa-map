@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 
 public class drawMap extends AppCompatActivity {
     ArrayList<Location> locs = new ArrayList<>();
+    ArrayList<Path> paths = new ArrayList<>();
 
     /*
     * Returns a Path representing two Locations in the ArrayList locs
@@ -30,20 +32,20 @@ public class drawMap extends AppCompatActivity {
         return new Path(locs.get(startLocIndex), locs.get(endLocIndex));
     }
 
-    private void drawPath(int startLoc, int endLoc) {
-        locs.addAll(Arrays.asList(new Location("Circle", 120, 95), //0
-                new Location("Bullring", 230, 95), //1
-                new Location("Library", 216, 60), //2
-                new Location("Richardson", 218, 137), //3
-                new Location("New1", 271, 85), //4
-                new Location("New2", 345, 85), //5
-                new Location("Carlos", 275, 162), //6
-                new Location("Moss", 339, 149), //7
-                new Location("Store", 429, 157), //8
-                new Location("Brand", 150, 180) //9
+    private void drawPathInit () {
+        locs.addAll(Arrays.asList(new Location("Circle", 470, 360), //0
+                new Location("Bullring", 930, 357), //1
+                new Location("Library", 877, 297), //2
+                new Location("Richardson", 865, 550), //3
+                new Location("New1", 1080,350), //4
+                new Location("New2", 1340, 340), //5
+                new Location("Carlos", 1060, 660), //6
+                new Location("Moss", 1340, 586), //7
+                new Location("Store", 1690, 620), //8
+                new Location("Brand", 653, 705) //9
         ));
 
-        ArrayList<Path> paths = new ArrayList<>();
+
         paths.addAll(Arrays.asList(getPath(0, 1),
                 getPath(1, 2),
                 getPath(1, 3),
@@ -51,12 +53,14 @@ public class drawMap extends AppCompatActivity {
                 getPath(3, 6),
                 getPath(4, 6),
                 getPath(6, 7),
-                getPath(4, 7),
+                //getPath(4, 7),
                 getPath(7, 8),
-                getPath(4, 8),
+                //getPath(4, 8),
                 getPath(2, 4),
                 getPath(1, 9),
-                getPath(9, 3)
+                getPath(9, 3),
+                getPath(5, 8),
+                getPath(5, 7)
         ));
 
 
@@ -67,16 +71,26 @@ public class drawMap extends AppCompatActivity {
 
     }
 
-    private void crearPunto(float x, float y, float xend, float yend, int color) {
+    private void processMap() {
+        drawPathInit();
         ImageView map = (ImageView) findViewById(R.id.imageView);
         Log.i("info", "image width: " + map.getWidth());
         Bitmap bmp = Bitmap.createBitmap(map.getWidth(), map.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bmp);
         map.draw(c);
 
-        Paint p = new Paint();
-        p.setColor(color);
-        c.drawLine(x, y, xend, yend, p);
+        Paint lineColor = new Paint();
+        lineColor.setColor(Color.parseColor("#A32136"));
+        lineColor.setStrokeWidth(10);
+        //Path p = paths.get(0);
+        //c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
+        for (Path p : paths) {
+            c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
+            /*Log.i("info","coords x1 " + p.end.x);
+            Log.i("info","coords y1 " + p.end.y);
+            Log.i("info","coords x2 " + p.end.x);
+            Log.i("info","coords y2 " + p.end.y);*/
+        }
         map.setImageBitmap(bmp);
     }
 
@@ -87,6 +101,14 @@ public class drawMap extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         getSupportActionBar().hide();
         ImageView map = (ImageView) findViewById(R.id.imageView);
+        map.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("info","" + event.getX());
+                Log.i("info","" + event.getY());
+                return false;
+            }
+        });
         /*map.post(new Runnable() {
             @Override
             public void run() {
@@ -112,7 +134,7 @@ public class drawMap extends AppCompatActivity {
                 ImageView map = (ImageView) findViewById(R.id.imageView);
                 Log.i("info","on global layout map.height() = " + map.getHeight());
                 Log.i("info","on global layout map.width() = " + map.getWidth());
-                crearPunto(30, 40, 1000,150, Color.WHITE);
+                processMap();
 
                 ViewTreeObserver vto = map.getViewTreeObserver();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
