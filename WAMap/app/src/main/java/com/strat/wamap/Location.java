@@ -1,11 +1,11 @@
 package com.strat.wamap;
 
 public class Location {
-    public double x;
-    public double y;
+    public float x;
+    public float y;
     public String name;
 
-    public Location (String name, double x, double y) {
+    public Location (String name, float x, float y) {
         this.name = name;
         this.x = x;
         this.y = y;
