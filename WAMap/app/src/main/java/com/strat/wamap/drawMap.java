@@ -1,6 +1,7 @@
 package com.strat.wamap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -118,9 +119,11 @@ public class drawMap extends AppCompatActivity {
                 crearPunto(30, 40, 100,150, Color.WHITE);
             }
         });*/
-        //Intent intent = getIntent();
-        //int startLoc = intent.getIntExtra("com.strat.wamap.start",-1);
-        //int endLoc = intent.getIntExtra("com.strat.wamap.end",-1);
+        Intent intent = getIntent();
+        int startLoc = intent.getIntExtra("com.strat.wamap.start",-1);
+        int endLoc = intent.getIntExtra("com.strat.wamap.end",-1);
+        Log.i("info","startloc " + startLoc);
+        Log.i("info","endLoc" + endLoc);
         // text = (TextView) findViewById(R.id.textView);
         //MapDrawing mapTest = (MapDrawing) findViewById(R.id.test);
         //Log.i("info","invalidate theoretically called");
