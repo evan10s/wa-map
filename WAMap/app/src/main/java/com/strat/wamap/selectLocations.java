@@ -43,12 +43,12 @@ public class selectLocations extends AppCompatActivity {
 
         //validate responses to verify that 2 different locations have been selected
 
-        /*//show error message
+        //show error message
         Spinner spinner = (Spinner) findViewById(R.id.start_loc);
-        TextView errorText = (TextView) spinner.getSelectedView();
-        errorText.setError("Testing");
-        errorText.setTextColor(Color.RED);
-        errorText.setText("");*/
+        //TextView errorText = (TextView) spinner.getSelectedView();
+        //errorText.setError("Testing");
+        //errorText.setTextColor(Color.RED);
+        //errorText.setText("");
         int startLoc = getSelectedSpinnerItem(R.id.start_loc);
         int endLoc = getSelectedSpinnerItem(R.id.end_loc);
 
@@ -65,7 +65,7 @@ public class selectLocations extends AppCompatActivity {
         Spinner spinner = (Spinner) findViewById(spinnerId);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,spinnerChoicesRes,
-                android.R.layout.simple_spinner_item);
+                R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         ArrayList<String> test = new ArrayList<>();
