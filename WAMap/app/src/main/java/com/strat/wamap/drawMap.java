@@ -72,8 +72,22 @@ public class drawMap extends AppCompatActivity {
 
     }
 
-    private void processMap() {
-        drawPathInit();
+    //Get the distance between the midpoints of two paths
+    private double getMidpointDist(Path path1, Path path2) {
+        Location p1Midpoint = path1.getMidPoint();
+        Location p2Midpoint = path2.getMidPoint();
+        return Math.sqrt(Math.pow(p1Midpoint.x - p2Midpoint.x,2) + Math.pow(p1Midpoint.x - p2Midpoint.y,2));
+    }
+
+    private void processMap(int startLoc, int endLoc) {
+        drawPathInit(); //define the paths
+        ArrayList<Path> pathsToDisplay = new ArrayList<>(); //create an array list to store the paths to be drawn
+
+        //first, add paths that have a start or end point that is the start or end location; add all possibilities to an ArrayList, then take the one whose midpoint is closest to the destination
+        for (Path p: paths) {
+            //do stuff
+        }
+
         ImageView map = (ImageView) findViewById(R.id.imageView);
         Log.i("info", "image width: " + map.getWidth());
         Bitmap bmp = Bitmap.createBitmap(map.getWidth(), map.getHeight(), Bitmap.Config.ARGB_8888);
@@ -99,37 +113,25 @@ public class drawMap extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw_map);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        getSupportActionBar().hide();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE); //make sure the screen stays landscape
+        getSupportActionBar().hide(); //hide the action bar
         ImageView map = (ImageView) findViewById(R.id.imageView);
         map.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event) { //debug
                 Log.i("info","" + event.getX());
                 Log.i("info","" + event.getY());
                 return false;
             }
         });
-        /*map.post(new Runnable() {
-            @Override
-            public void run() {
-                ImageView map = (ImageView) findViewById(R.id.imageView);
-                int height = map.getHeight();
-                int width = map.getWidth();
-                crearPunto(30, 40, 100,150, Color.WHITE);
-            }
-        });*/
+
         Intent intent = getIntent();
-        int startLoc = intent.getIntExtra("com.strat.wamap.start",-1);
-        int endLoc = intent.getIntExtra("com.strat.wamap.end",-1);
+        final int startLoc = intent.getIntExtra("com.strat.wamap.start",-1);
+        final int endLoc = intent.getIntExtra("com.strat.wamap.end",-1);
         Log.i("info","startloc " + startLoc);
         Log.i("info","endLoc" + endLoc);
-        // text = (TextView) findViewById(R.id.textView);
-        //MapDrawing mapTest = (MapDrawing) findViewById(R.id.test);
-        //Log.i("info","invalidate theoretically called");
-        //   mapTest.invalidate();
-        //mapTest.postInvalidate();
 
+        //draw the map
         ViewTreeObserver vto = map.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -137,7 +139,7 @@ public class drawMap extends AppCompatActivity {
                 ImageView map = (ImageView) findViewById(R.id.imageView);
                 Log.i("info","on global layout map.height() = " + map.getHeight());
                 Log.i("info","on global layout map.width() = " + map.getWidth());
-                processMap();
+                processMap(startLoc, endLoc);
 
                 ViewTreeObserver vto = map.getViewTreeObserver();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
