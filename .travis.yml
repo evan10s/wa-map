@@ -9,3 +9,4 @@ android:
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-22
   - sys-img-x86-android-17
+before_script: cd WAMap
