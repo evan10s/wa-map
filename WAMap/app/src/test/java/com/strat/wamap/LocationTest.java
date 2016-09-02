@@ -17,12 +17,22 @@ public class LocationTest {
     }
 
     @Test
-    public void LocationMidpointTest() throws Exception {
+    public void pathMidpointTest() throws Exception {
         Location start = new Location("1",10,10);
         Location end = new Location("2",20,20);
         Path path = new Path(start, end);
         path.getMidPoint();
         Assert.assertTrue(path.getMidPoint().x==15);
         Assert.assertTrue(path.getMidPoint().y==15);
+    }
+
+    @Test
+    public void PathCreateTest() throws Exception {
+        Location start = new Location("1",10,10);
+        Location end = new Location("2",20,20);
+        Path p = new Path(start, end);
+
+        Assert.assertTrue(p.start instanceof Location);
+        Assert.assertTrue(p.end instanceof Location);
     }
 }
