@@ -2324,7 +2324,13 @@
       <option name="project" value="LOCAL" />
       <updated>1472775026248</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Initial commit">
+      <created>1472775048725</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1472775048725</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2408,7 +2414,8 @@
     <MESSAGE value="Add beginnings of routing algorithm" />
     <MESSAGE value="Start adding some unit tests" />
     <MESSAGE value="Added more unit tests for Path class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more unit tests for Path class" />
+    <MESSAGE value="Initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
