@@ -9,3 +9,6 @@ before_script:
   - cd WAMap
 script:
   - ./gradlew build connectedCheck
+  
+before_install:
+  - android update sdk --filter extra-android-support --no-ui --force > /dev/null
