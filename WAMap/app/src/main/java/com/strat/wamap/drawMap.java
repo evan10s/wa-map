@@ -79,14 +79,34 @@ public class drawMap extends AppCompatActivity {
         return Math.sqrt(Math.pow(p1Midpoint.x - p2Midpoint.x,2) + Math.pow(p1Midpoint.x - p2Midpoint.y,2));
     }
 
+    private boolean pointsMatch (Location loc1, Location loc2) {
+        return loc1.x == loc2.x && loc1.y == loc2.y;
+    }
+
+    private ArrayList<Path> getPathsWithPoint(Location pt) {
+        ArrayList<Path> matchingPaths = new ArrayList<>();
+        for (Path p : paths) {
+            if (pointsMatch(pt,p.start) || pointsMatch(pt,p.end) || pointsMatch(pt, p.start) || pointsMatch(pt,p.end)) {
+                matchingPaths.add(p);
+            }
+        }
+        return matchingPaths;
+    }
     private void processMap(int startLoc, int endLoc) {
         drawPathInit(); //define the paths
-        ArrayList<Path> pathsToDisplay = new ArrayList<>(); //create an array list to store the paths to be drawn
-
+        ArrayList<Path> startPtPaths = new ArrayList<>(); //create an array list to store the paths to be drawn
+        ArrayList<Path> endPtPaths = new ArrayList<>();
+        Location start = locs.get(startLoc);
+        Location end = locs.get(endLoc);
         //first, add paths that have a start or end point that is the start or end location; add all possibilities to an ArrayList, then take the one whose midpoint is closest to the destination
-        for (Path p: paths) {
-            //do stuff
-        }
+        startPtPaths = getPathsWithPoint(start);
+        //iterate through pathstoDisplay so that there is only one Path showing connected to the starting point
+        endPtPaths = getPathsWithPoint(end);
+
+        //for (Path p: pathsToDisplay) {
+
+        //}
+        //Log.i("info",pathsToDisplay.toString());
 
         ImageView map = (ImageView) findViewById(R.id.imageView);
         Log.i("info", "image width: " + map.getWidth());
@@ -99,7 +119,7 @@ public class drawMap extends AppCompatActivity {
         lineColor.setStrokeWidth(10);
         //Path p = paths.get(0);
         //c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
-        for (Path p : paths) {
+        for (Path p : startPtPaths) {
             c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
             /*Log.i("info","coords x1 " + p.end.x);
             Log.i("info","coords y1 " + p.end.y);
