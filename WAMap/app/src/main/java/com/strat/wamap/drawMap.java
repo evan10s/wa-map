@@ -1,13 +1,11 @@
 package com.strat.wamap;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +26,11 @@ public class drawMap extends AppCompatActivity {
     * Returns a Path representing two Locations in the ArrayList locs
     *
      */
+
+    public drawMap () {
+
+    }
+
     private Path getPath(int startLocIndex, int endLocIndex) {
         return new Path(locs.get(startLocIndex), locs.get(endLocIndex));
     }
@@ -54,32 +56,29 @@ public class drawMap extends AppCompatActivity {
                 getPath(3, 6),
                 getPath(4, 6),
                 getPath(6, 7),
-                //getPath(4, 7),
                 getPath(7, 8),
-                //getPath(4, 8),
                 getPath(2, 4),
                 getPath(1, 9),
                 getPath(9, 3),
                 getPath(5, 8),
-                getPath(5, 7)
+                getPath(5, 7),
+                getPath(0,9)
         ));
-
-
-
-       /* for (Path path : paths) {
-
-        }*/
-
     }
+
 
     //Get the distance between the midpoints of two paths
-    private double getMidpointDist(Path path1, Path path2) {
+    public double getMidpointDist(Path path1, Path path2) {
         Location p1Midpoint = path1.getMidPoint();
         Location p2Midpoint = path2.getMidPoint();
-        return Math.sqrt(Math.pow(p1Midpoint.x - p2Midpoint.x,2) + Math.pow(p1Midpoint.x - p2Midpoint.y,2));
+        return distanceBetweenPoints(p1Midpoint,p2Midpoint);
     }
 
-    private boolean pointsMatch (Location loc1, Location loc2) {
+    public double distanceBetweenPoints (Location l1, Location l2) {
+        return Math.sqrt(Math.pow(l1.x - l2.x,2) + Math.pow(l1.y - l2.y,2));
+    }
+
+    public boolean pointsMatch (Location loc1, Location loc2) {
         return loc1.x == loc2.x && loc1.y == loc2.y;
     }
 
@@ -92,14 +91,69 @@ public class drawMap extends AppCompatActivity {
         }
         return matchingPaths;
     }
+
+    /*
+    * Determines which end of a given Path is closer to a given point and returns the closer end as a Location
+    * @param pathToCheck The path to check
+    * @param goalPoint The point for which you want to find which end of the given path is cloest
+    * @return A Location representing the endpoint of the path that is closest to goalPoint
+     */
+    private Location getClosestEndPoint(Path pathToCheck, Location goalPoint) {
+        //compare distance of path start point & goal point and path end point & goal point
+        if (distanceBetweenPoints(pathToCheck.start,goalPoint) < distanceBetweenPoints(pathToCheck.end,goalPoint)) { //start point is closer
+            return pathToCheck.start;
+        } else { //end point is closer
+            return pathToCheck.end;
+        }
+    }
+
+    /*
+    * Gets all the paths touching startPt, then finds then single Path whose midpoint is closest to stopPt.
+    * The function will call itself again until startPt is the same as stopPt
+    * @param startPt The point to base search for Paths on
+    * @param stopPt The goal point which indicates when the process is finished
+    * @param pathList An ArrayList of Paths to contain matching paths found by this function
+    * @return An ArrayList of Paths representing the results of the function
+     */
+    private ArrayList<Path> calcPath (Location startPt, Location stopPt, ArrayList<Path> pathList) {
+        ArrayList<Path> startPtPaths; //ArrayList containing matching Paths - that is, Paths which contain this point
+        startPtPaths = getPathsWithPoint(startPt); //fill the ArrayList using a function that performs task describing in the line above
+
+        Path closestPathToEndPt = startPtPaths.get(0); //initial value
+        boolean certainDone = false; //to handle cases where another path's midpoint is closer but there's a path whose endpoint is the destination
+        for (int i = 1; i < startPtPaths.size(); i++) { //search for minimum distance
+            Path currElem = startPtPaths.get(i);
+            if (distanceBetweenPoints(currElem.getMidPoint(),stopPt) < distanceBetweenPoints(closestPathToEndPt.getMidPoint(),stopPt)) {
+                closestPathToEndPt = startPtPaths.get(i);
+            }
+            if (pointsMatch(currElem.start,stopPt) || pointsMatch(currElem.end, stopPt)) {
+                closestPathToEndPt = startPtPaths.get(i);
+                certainDone = true;
+                break;
+            }
+        }
+
+        pathList.add(closestPathToEndPt); //add the path to the list of Paths to show
+
+        Location newStartPt = getClosestEndPoint(closestPathToEndPt,stopPt);
+        if (pointsMatch(newStartPt,stopPt) || certainDone) {
+            return pathList;
+        } else {
+            return calcPath(newStartPt, stopPt, pathList);
+        }
+
+    }
+
     private void processMap(int startLoc, int endLoc) {
         drawPathInit(); //define the paths
         ArrayList<Path> startPtPaths = new ArrayList<>(); //create an array list to store the paths to be drawn
         ArrayList<Path> endPtPaths = new ArrayList<>();
+        ArrayList<Path> pathsToShow = new ArrayList<>();
         Location start = locs.get(startLoc);
         Location end = locs.get(endLoc);
         //first, add paths that have a start or end point that is the start or end location; add all possibilities to an ArrayList, then take the one whose midpoint is closest to the destination
-        startPtPaths = getPathsWithPoint(start);
+        pathsToShow = calcPath(start, end, pathsToShow);
+
         //iterate through pathstoDisplay so that there is only one Path showing connected to the starting point
         endPtPaths = getPathsWithPoint(end);
 
@@ -119,7 +173,7 @@ public class drawMap extends AppCompatActivity {
         lineColor.setStrokeWidth(10);
         //Path p = paths.get(0);
         //c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
-        for (Path p : startPtPaths) {
+        for (Path p : pathsToShow) {
             c.drawLine(p.start.x, p.start.y, p.end.x, p.end.y, lineColor);
             /*Log.i("info","coords x1 " + p.end.x);
             Log.i("info","coords y1 " + p.end.y);
@@ -128,6 +182,7 @@ public class drawMap extends AppCompatActivity {
         }
         map.setImageBitmap(bmp);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
