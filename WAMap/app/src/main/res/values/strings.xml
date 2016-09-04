@@ -7,6 +7,11 @@
     <string name="choose_loc_from">Choose a location</string>
     <string name="submit_locs_btn">(Pokemon) Go</string>
     <string name="map_of_wa">Map of WA</string>
+    <string name="dev_show_west_map">West view</string>
+    <string name="dev_show_east_map">East view</string>
+    <string name="str_dev_select_map_view">Which map do you want to display?</string>
+    <string name="show_dev_options_btn">Advanced...</string>
+    <string name="dev_mode_submit_btn">Show me everything</string>
     <string-array name="locations">
 
         <item>Circle</item>

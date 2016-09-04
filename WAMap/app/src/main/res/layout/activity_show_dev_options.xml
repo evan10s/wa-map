@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="com.strat.wamap.showDevOptions"
+    android:padding="0dp"
+    android:id="@+id/show_map_west">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/dev_menu"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dev_menu"
+        android:text="@string/str_dev_select_map_view"
+        android:id="@+id/dev_select_map_view_directions"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dev_select_map_view_directions"
+        android:layout_alignParentStart="true"
+        android:id="@+id/show_map_question_group">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dev_show_west_map"
+            android:id="@+id/dev_show_west"
+            android:onClick="onRadioButtonClicked"
+            android:padding="10dp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dev_show_east_map"
+            android:id="@+id/dev_show_east"
+            android:onClick="onRadioButtonClicked"
+            android:padding="10dp" />
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dev_mode_submit_btn"
+        android:id="@+id/submit_locs"
+        android:onClick="sendShowMapIntent"
+        android:nestedScrollingEnabled="false"
+        android:textColor="@android:color/primary_text_light"
+        android:enabled="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_below="@+id/show_map_question_group"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
