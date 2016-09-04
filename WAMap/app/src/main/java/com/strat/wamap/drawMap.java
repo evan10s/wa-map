@@ -46,7 +46,8 @@ public class drawMap extends AppCompatActivity {
                     new Location("Carlos", 665, 410), //6
                     new Location("Moss", 685, 325), //7
                     new Location("Store", 645, 230), //8
-                    new Location("Brand", 860, 720) //9
+                    new Location("Brand", 860, 720), //9
+                    new Location("Admissions", 394,929)
             ));
 
 
@@ -63,7 +64,8 @@ public class drawMap extends AppCompatActivity {
                     getPath(9, 3),
                     getPath(5, 8),
                     getPath(5, 7),
-                    getPath(0,9)
+                    getPath(10,9),
+                    getPath(0,10)
             ));
         }
 
